@@ -1,0 +1,61 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+
+   send_email:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+        - name: Send email on Failure
+          if: ${{ failure() }}
+          uses: peter-evans/sendgrid-action@759305bb5ea3ea76d9520c2c7fce146f656fac1a
+          env:
+            SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+            EVENT: ${{ github.event_name }}
+            REPOSITORY: ${{ github.repository }}
+            REF: ${{ github.ref }}
+            SUCCESS: false
+
+        - name: Send email on Failure
+          if: ${{ failure() }}
+          uses: peter-evans/sendgrid-action@759305bb5ea3ea76d9520c2c7fce146f656fac1a
+          env:
+            SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+            EVENT: ${{ github.event_name }}
+            REPOSITORY: ${{ github.repository }}
+            REF: ${{ github.ref }}
+            SUCCESS: false            
+
