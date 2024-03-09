@@ -36,9 +36,8 @@ jobs:
     steps:
       - name: Send email on Failure
         if: ${{ failure() }}
-        uses: peter-evans/sendgrid-action@759305bb5ea3ea76d9520c2c7fce146f656fac1a
+        uses: cquintini/sendgrid-action@v1.0.2
         env:
-          SCRIPT_FILEPATH: ./.github/sendgrid.js
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           EVENT: ${{ github.event_name }}
           REPOSITORY: ${{ github.repository }}
@@ -47,9 +46,8 @@ jobs:
 
       - name: Send email on success
         if: ${{ success() }}
-        uses: peter-evans/sendgrid-action@759305bb5ea3ea76d9520c2c7fce146f656fac1a
+        uses: cquintini/sendgrid-action@v1.0.2
         env:
-          SCRIPT_FILEPATH: ./.github/sendgrid.js
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           EVENT: ${{ github.event_name }}
           REPOSITORY: ${{ github.repository }}
