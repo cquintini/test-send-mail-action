@@ -41,7 +41,7 @@ jobs:
         if: ${{ failure() }}
         uses: peter-evans/sendgrid-action@v1
         env:
-          SCRIPT_FILEPATH: .github/sendgrid.js
+          SCRIPT_FILEPATH: sendgrid.js
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           EVENT: ${{ github.event_name }}
           REPOSITORY: ${{ github.repository }}
@@ -52,7 +52,7 @@ jobs:
         if: ${{ success() }}
         uses: peter-evans/sendgrid-action@v1
         env:
-          SCRIPT_FILEPATH: .github/sendgrid.js
+          SCRIPT_FILEPATH: sendgrid.js
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           EVENT: ${{ github.event_name }}
           REPOSITORY: ${{ github.repository }}
