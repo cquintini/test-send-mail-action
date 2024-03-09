@@ -36,7 +36,7 @@ jobs:
     steps:
       - name: Send email on Failure
         if: ${{ failure() }}
-        uses: cquintini/sendgrid-action@v1.0.2
+        uses: cquintini/sendgrid-action@v1.0.3
         env:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           EVENT: ${{ github.event_name }}
@@ -46,7 +46,7 @@ jobs:
 
       - name: Send email on success
         if: ${{ success() }}
-        uses: cquintini/sendgrid-action@v1.0.2
+        uses: cquintini/sendgrid-action@v1.0.3
         env:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           EVENT: ${{ github.event_name }}
