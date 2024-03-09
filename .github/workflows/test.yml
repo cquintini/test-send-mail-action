@@ -32,16 +32,13 @@ jobs:
 
   send_email:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./src/scripts
     needs: [deploy_dotnet, deploy_dotnet]
     steps:
       - name: Send email on Failure
         if: ${{ failure() }}
-        uses: peter-evans/sendgrid-action@v1
+        uses: peter-evans/sendgrid-action@759305bb5ea3ea76d9520c2c7fce146f656fac1a
         env:
-          SCRIPT_FILEPATH: sendgrid.js
+          SCRIPT_FILEPATH: .github\sendgrid.js
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           EVENT: ${{ github.event_name }}
           REPOSITORY: ${{ github.repository }}
@@ -50,9 +47,9 @@ jobs:
 
       - name: Send email on success
         if: ${{ success() }}
-        uses: peter-evans/sendgrid-action@v1
+        uses: peter-evans/sendgrid-action@759305bb5ea3ea76d9520c2c7fce146f656fac1a
         env:
-          SCRIPT_FILEPATH: sendgrid.js
+          SCRIPT_FILEPATH: .github\sendgrid.js
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           EVENT: ${{ github.event_name }}
           REPOSITORY: ${{ github.repository }}
