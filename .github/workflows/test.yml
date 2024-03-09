@@ -1,61 +1,55 @@
-# This is a basic workflow to help you get started with Actions
+name: CI/CD for ASP.NET Core and Azure Static Web Apps
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: ["main"]
+    branches:
+      - main
+      - hotfix
   pull_request:
-    branches: ["main"]
+    branches:
+      - main
+      - hotfix
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+permissions:
+  contents: read
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  build_dotnet:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    name: Build and Deploy ASP.NET Core App
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: Print Hello World
+        run: echo "Hello, world from build dotnet!"
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-
-   send_email:
+  deploy_dotnet:
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: build_dotnet
+
     steps:
-        - name: Send email on Failure
-          if: ${{ failure() }}
-          uses: peter-evans/sendgrid-action@759305bb5ea3ea76d9520c2c7fce146f656fac1a
-          env:
-            SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-            EVENT: ${{ github.event_name }}
-            REPOSITORY: ${{ github.repository }}
-            REF: ${{ github.ref }}
-            SUCCESS: false
+      - name: Print Hello World
+        run: echo "Hello, world from deploy dotnet!"
 
-        - name: Send email on Failure
-          if: ${{ failure() }}
-          uses: peter-evans/sendgrid-action@759305bb5ea3ea76d9520c2c7fce146f656fac1a
-          env:
-            SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-            EVENT: ${{ github.event_name }}
-            REPOSITORY: ${{ github.repository }}
-            REF: ${{ github.ref }}
-            SUCCESS: false            
+  send_email:
+    runs-on: ubuntu-latest
+    needs: [deploy_dotnet, deploy_dotnet]
+    steps:
+      - name: Send email on Failure
+        if: ${{ failure() }}
+        uses: peter-evans/sendgrid-action@759305bb5ea3ea76d9520c2c7fce146f656fac1a
+        env:
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          EVENT: ${{ github.event_name }}
+          REPOSITORY: ${{ github.repository }}
+          REF: ${{ github.ref }}
+          SUCCESS: false
 
+      - name: Send email on success
+        if: ${{ success() }}
+        uses: peter-evans/sendgrid-action@759305bb5ea3ea76d9520c2c7fce146f656fac1a
+        env:
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          EVENT: ${{ github.event_name }}
+          REPOSITORY: ${{ github.repository }}
+          REF: ${{ github.ref }}
+          SUCCESS: true
