@@ -51,7 +51,7 @@ jobs:
           node ./.github/sendgrid.js
         env:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-          EVENT: ${{ github.event_name }}
+          EVENT_NAME: ${{ github.event_name }}
           REPOSITORY: ${{ github.repository }}
           REF: ${{ github.ref }}
           SUCCESS: false
@@ -62,7 +62,7 @@ jobs:
           node ./.github/sendgrid.js
         env:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-          EVENT: ${{ github.event_name }}
+          EVENT_NAME: ${{ github.event_name }}
           REPOSITORY: ${{ github.repository }}
           REF: ${{ github.ref }}
           SUCCESS: true
