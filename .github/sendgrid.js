@@ -1,5 +1,6 @@
-const sgMail = require("@sendgrid/mail");
+#! /usr/bin/env node
 
+const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const eventName = process.env.EVENT_NAME;
@@ -14,13 +15,16 @@ console.log("Git Ref:", ref);
 console.log("Success:", success ? "Yes" : "No");
 
 const msg = {
-  to: "recipient@example.com", // Change this to the recipient's email address
-  from: "sender@example.com", // Change this to the sender's email address
+  to: "cesarquintini@gmail.com",
+  from: "noreply@cocomarch.com",
   subject: success ? "Deployment Success" : "Deployment Failure",
   text: `Deployment ${success ? "succeeded" : "failed"}. Event: ${eventName}, Repository: ${repository}, Ref: ${ref}`,
+  html: `<p>Deployment ${
+    success ? "succeeded" : "failed"
+  }. Event: ${eventName}, Repository: ${repository}, Ref: ${ref}</p>`,
 };
 
 sgMail
   .send(msg)
-  .then(() => console.log("Email sent successfully"))
-  .catch((error) => console.error("Error sending email:", error));
+  .then(() => console.log("Mail sent successfully"))
+  .catch((error) => console.error(error.toString()));
