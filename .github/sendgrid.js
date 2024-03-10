@@ -21,8 +21,8 @@ const htmlContent = `
 `;
 
 const msg = {
-  to: "noreply@cocomarch.com", // Replace with recipient's email
-  from: "cesarquintini@gmail.com", // Replace with sender's email
+  to: "cesarquintini@gmail.com", // Replace with recipient's email
+  from: "noreply@cocomarch.com", // Replace with sender's email
   subject: success ? "Deployment Success" : "Deployment Failure",
   text: `${successMessage}. Event: ${eventName}, Repository: ${repository}, Ref: ${ref}`,
   html: htmlContent,
