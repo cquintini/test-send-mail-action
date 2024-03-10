@@ -34,9 +34,22 @@ jobs:
     runs-on: ubuntu-latest
     needs: [deploy_dotnet, deploy_dotnet]
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Install dependencies
+        run: npm install @sendgrid/mail
+
       - name: Send email on Failure
         if: ${{ failure() }}
-        uses: cquintini/sendgrid-action@v1.0.8
+        run: |
+          echo "Sending email on failure"
+          node ./.github/sendgrid.js
         env:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           EVENT: ${{ github.event_name }}
@@ -46,7 +59,9 @@ jobs:
 
       - name: Send email on success
         if: ${{ success() }}
-        uses: cquintini/sendgrid-action@v1.0.8
+        run: |
+          echo "Sending email on success"
+          node ./.github/sendgrid.js
         env:
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           EVENT: ${{ github.event_name }}
