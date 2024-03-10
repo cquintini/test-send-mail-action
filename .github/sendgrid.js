@@ -8,20 +8,24 @@ const repository = process.env.REPOSITORY;
 const ref = process.env.REF;
 const success = process.env.SUCCESS === "true";
 
-// Use eventName, repository, and ref variables as needed in your email content or logic
-console.log("Event Name:", eventName);
-console.log("Repository:", repository);
-console.log("Git Ref:", ref);
-console.log("Success:", success ? "Yes" : "No");
+const successMessage = success ? "Deployment succeeded" : "Deployment failed";
+const statusColor = success ? "green" : "red";
+
+const htmlContent = `
+  <div style="font-family: Arial, sans-serif;">
+    <h2 style="color: ${statusColor};">${successMessage}</h2>
+    <p><strong>Event:</strong> ${eventName}</p>
+    <p><strong>Repository:</strong> ${repository}</p>
+    <p><strong>Ref:</strong> ${ref}</p>
+  </div>
+`;
 
 const msg = {
-  to: "cesarquintini@gmail.com",
-  from: "noreply@cocomarch.com",
+  to: "noreply@cocomarch.com", // Replace with recipient's email
+  from: "cesarquintini@gmail.com", // Replace with sender's email
   subject: success ? "Deployment Success" : "Deployment Failure",
-  text: `Deployment ${success ? "succeeded" : "failed"}. Event: ${eventName}, Repository: ${repository}, Ref: ${ref}`,
-  html: `<p>Deployment ${
-    success ? "succeeded" : "failed"
-  }. Event: ${eventName}, Repository: ${repository}, Ref: ${ref}</p>`,
+  text: `${successMessage}. Event: ${eventName}, Repository: ${repository}, Ref: ${ref}`,
+  html: htmlContent,
 };
 
 sgMail
